@@ -7,6 +7,11 @@ const INITIAL_PAGE = 1;
 const END_PAGE = 20;
 const PRODUCTS_PER_PAGE = 3;
 
+// var express = require("express");
+// var cors = require("cors");
+// var app = express();
+// app.use(cors({ origin: true, credentials: true }));
+
 function ListPage({productList, currentPage, setCurrentPage, minStock, setMinStock}) {
   return (<div className="container">
     <h2>Nuestros Productos</h2>
@@ -93,10 +98,12 @@ function App() {
     let skip = (currentPage - INITIAL_PAGE) * PRODUCTS_PER_PAGE;
     const fetchMovies = async () => {
       try {
-        const response = await fetch(`https://dummyjson.com/products`);
+        // Set the request mode to 'no-cors' to fetch the data from the API
+        const response = await fetch(`http://127.0.0.1:8000/api/films`, {mode: 'no-cors'});
         if (!response.ok) {
           throw new Error('No se pudo obtener la lista de productos');
         }
+        console.log(response);
         const data = await response.json();
         data.products = data.products.filter(product => product.stock >= minStock);
         data.products = data.products.slice(skip, skip + PRODUCTS_PER_PAGE);
@@ -106,7 +113,7 @@ function App() {
       }
     };
 
-    fetchProducts();
+    fetchMovies();
   }, [currentPage, minStock]);
 
   return (
