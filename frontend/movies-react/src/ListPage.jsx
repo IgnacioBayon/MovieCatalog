@@ -12,17 +12,17 @@ const PRODUCTS_PER_PAGE = 3;
 // var app = express();
 // app.use(cors({ origin: true, credentials: true }));
 
-function ListPage({productList, currentPage, setCurrentPage, minStock, setMinStock}) {
+function ListPage({movieList, currentPage, setCurrentPage, minStock, setMinStock}) {
   return (<div className="container">
     <h2>Nuestros Productos</h2>
     <Filters
-      productList={productList}
+      movieList={movieList}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       minStock={minStock}
       setMinStock={setMinStock}
     />
-    <ProductList productList={productList} minStock={minStock}/>
+    <MovieList productList={movieList} minStock={minStock}/>
   </div>);
 }
 
@@ -61,28 +61,32 @@ function Filters({
   </>);
 }
 
-function ProductList({productList, minStock}) {
+function MovieList({productList: movieList, minStock}) {
   return (<div>
-    {productList.map(product => 
-    // Remove the link appearance and not blue color
-      <NavLink to={`/product/${product.id}`} key={product.id} style={{textDecoration: 'none', color: 'black'}}>
-        <Product product={product}/>
+    {movieList.map(movie => 
+      // Remove the link appearance
+      // Add unique key to each film
+      <NavLink to={`/films/${movie.title}`} key={movie.title} style={{textDecoration: 'none', color: 'black'}}>
+        <Movie movie={movie}/>
       </NavLink>)}
   </div>);
 }
 
-function Product({product}) {
+function Movie({movie}) {
   return (
-    <div className="product-details" id="productDetails">
-      <img src={product.thumbnail} alt="Thumbnail" id="thumbnail"/>
+    <div className="movie-details" id="movieDetails">
+      <img src={movie.image_url} alt="Thumbnail" id="thumbnail"/>
       <div className="info">
-        <h2>{product.title}</h2>
-        <p>{product.description}</p>
+        <h2>{movie.title}</h2>
+        <p>{movie.description}</p>
         <p>
-          <strong>Precio:</strong> <span>{product.price}€</span>
+          <strong>Genre:</strong> <span>{movie.genre}</span>
         </p>
         <p>
-          <strong>Stock:</strong> <span>{product.stock}</span>
+          <strong>Director:</strong> <span>{movie.director}</span>
+        </p>
+        <p>
+          <strong>Release Year:</strong> <span>{movie.release_year}</span>
         </p>
       </div>
     </div>
@@ -91,39 +95,42 @@ function Product({product}) {
 
 function App() {
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
-  const [productList, setProductList] = useState([]);
-  const [minStock, setMinStock] = useState(1);
+  const [movieList, setMovieList] = useState([]);
+  const [minRating, setMinRating] = useState(1);
 
   useEffect(() => {
     let skip = (currentPage - INITIAL_PAGE) * PRODUCTS_PER_PAGE;
     const fetchMovies = async () => {
       try {
         // Set the request mode to 'no-cors' to fetch the data from the API
-        const response = await fetch(`http://127.0.0.1:8000/api/films`, {mode: 'no-cors'});
+        // Content type application json
+        const response = await fetch(`http://127.0.0.1:8000/api/films/all/`);
         if (!response.ok) {
-          throw new Error('No se pudo obtener la lista de productos');
-        }
-        console.log(response);
+          throw new Error('Could not find the list');
+        } 
         const data = await response.json();
-        data.products = data.products.filter(product => product.stock >= minStock);
-        data.products = data.products.slice(skip, skip + PRODUCTS_PER_PAGE);
-        setProductList(data.products);
+        console.log(data);
+        
+        // Set the Movie List to the data fetched from the API
+        setMovieList(data);
+
+        // setProductList(data.products);
       } catch (error) {
-        console.error('Error al obtener los productos:', error);
+        console.error('Error while obtaining the list:', error);
       }
     };
 
     fetchMovies();
-  }, [currentPage, minStock]);
+  }, [currentPage, minRating]);
 
   return (
       // <Header/>
       <ListPage
-        productList={productList}
+        movieList={movieList}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        minStock={minStock}
-        setMinStock={setMinStock}
+        minStock={minRating}
+        setMinStock={setMinRating}
       />
       // <Footer/>
   )
