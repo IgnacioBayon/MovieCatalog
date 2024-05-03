@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.urls import path
-from api.users import views
-from api.films import views as viewsFilms
+from .users import views
+from .films import views as viewsFilms
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
+
 
 urlpatterns = [
     path("api/users/", views.RegistroView.as_view(), name="registro"),
