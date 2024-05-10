@@ -5,11 +5,13 @@ from api.users.models import Usuario
 # Create your models here.
 # Create Film model
 class Film(models.Model):
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=256)
     genre = models.CharField(max_length=64)
     description = models.TextField()
     director = models.CharField(max_length=128)
     release_year = models.IntegerField()
+    image_url = models.URLField(default="https://th.bing.com/th/id/R.51879f9aeaaf6060aa42a64df71696f1?rik=h8Ox9c2rUwGi%2fg&pid=ImgRaw&r=0")
     global_rating = models.IntegerField(null=True, blank=True)
 
     def __str__(self):

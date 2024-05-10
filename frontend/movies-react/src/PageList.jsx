@@ -12,17 +12,19 @@ const PRODUCTS_PER_PAGE = 3;
 // var app = express();
 // app.use(cors({ origin: true, credentials: true }));
 
-function ListPage({movieList, currentPage, setCurrentPage, minStock, setMinStock}) {
+function PageList({movieList, currentPage, setCurrentPage, minStock, setMinStock}) {
   return (<div className="container">
-    <h2>Nuestros Productos</h2>
+    <h2>Movies</h2>
     <Filters
       movieList={movieList}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
-      minStock={minStock}
-      setMinStock={setMinStock}
+      // minStock={minStock}
+      // setMinStock={setMinStock}
     />
-    <MovieList productList={movieList} minStock={minStock}/>
+    <MovieList productList={movieList}/>
+    {/* <MovieList productList={movieList} minStock={minStock}/> */}
+
   </div>);
 }
 
@@ -30,8 +32,8 @@ function ListPage({movieList, currentPage, setCurrentPage, minStock, setMinStock
 function Filters({
   currentPage,
   setCurrentPage,
-  minStock,
-  setMinStock
+  // minStock,
+  // setMinStock
 }) {
 
   function changePage(page) {
@@ -40,10 +42,10 @@ function Filters({
     setCurrentPage(page);
   }
 
-  function changeMinStock(minStock) {
-    minStock = Math.max(0, minStock);
-    setMinStock(minStock);
-  }
+  // function changeMinStock(minStock) {
+  //   minStock = Math.max(0, minStock);
+  //   setMinStock(minStock);
+  // }
 
   return (<>
     <div className="buttons">
@@ -52,11 +54,11 @@ function Filters({
         <input type="number" value={currentPage} onChange={(e) => changePage(e.target.value)}/>
         <button onClick={() => changePage(currentPage + 1)} disabled={currentPage===END_PAGE}>&gt;</button>
       </div>
-      <div className="StockFilter">
+      {/* <div className="StockFilter">
         <p>Stock Minimon
           <input type="number" value={minStock} onChange={(e) => changeMinStock(e.target.value)} placeholder="Minimum Stock"/>
         </p>
-      </div>
+      </div> */}
     </div>
   </>);
 }
@@ -66,7 +68,7 @@ function MovieList({productList: movieList, minStock}) {
     {movieList.map(movie => 
       // Remove the link appearance
       // Add unique key to each film
-      <NavLink to={`/films/${movie.title}`} key={movie.title} style={{textDecoration: 'none', color: 'black'}}>
+      <NavLink to={`/films/${movie.id}`} key={movie.id} style={{textDecoration: 'none', color: 'black'}}>
         <Movie movie={movie}/>
       </NavLink>)}
   </div>);
@@ -78,7 +80,7 @@ function Movie({movie}) {
       <img src={movie.image_url} alt="Thumbnail" id="thumbnail"/>
       <div className="info">
         <h2>{movie.title}</h2>
-        <p>{movie.description}</p>
+        {/* <p>{movie.description}</p> */}
         <p>
           <strong>Genre:</strong> <span>{movie.genre}</span>
         </p>
@@ -87,6 +89,9 @@ function Movie({movie}) {
         </p>
         <p>
           <strong>Release Year:</strong> <span>{movie.release_year}</span>
+        </p>
+        <p>
+          <strong>Rating:</strong> <span>{movie.global_rating}</span>
         </p>
       </div>
     </div>
@@ -102,7 +107,6 @@ function App() {
     let skip = (currentPage - INITIAL_PAGE) * PRODUCTS_PER_PAGE;
     const fetchMovies = async () => {
       try {
-        // Set the request mode to 'no-cors' to fetch the data from the API
         // Content type application json
         const response = await fetch(`http://127.0.0.1:8000/api/films/all/`);
         if (!response.ok) {
@@ -125,7 +129,7 @@ function App() {
 
   return (
       // <Header/>
-      <ListPage
+      <PageList
         movieList={movieList}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

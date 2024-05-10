@@ -1,28 +1,39 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import ListPage from './ListPage.jsx'
-import ContactInfo from './ContactInfo.jsx'
-import ProductPage from './ProductPage.jsx'
-import ErrorPage from './ErrorPage.jsx'
+import PageList from './PageList.jsx'
+import PageMovie from './PageMovie.jsx'
+import PageError from './PageError.jsx'
+import PageProfile from './PageProfile.jsx'
+import PageLogin from './PageLogin.jsx'
+import PageRegister from './PageRegister.jsx'
 import './index.css'
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { redirect, createBrowserRouter, RouterProvider } from "react-router-dom";
+
 
 const router = createBrowserRouter([{
+    path: "/login",
+    element: <PageLogin/>,
+    action: loginUser,
+  }, {
+    path: "/register",
+    element: <PageRegister/>,
+    action: registerUser,
+  },{
   path: "/",
   element: <App/>,
   children: [{
     path: "",
-    element: <ListPage/>,
+    element: <PageList/>,
   },{
-    path: "contactInfo",
-    element: <ContactInfo/>,
+    path: "profile",
+    element: <PageProfile/>,
   }, {
-    path: "product/:id",
-    element: <ProductPage/>,
-    errorElement: <ErrorPage/>,
+    path: "films/:id",
+    element: <PageMovie/>,
+    errorElement: <PageError/>,
     loader: async ({ params }) => {
-      return await fetch(`https://dummyjson.com/products/${params.id}`)
+      return await fetch(`http://127.0.0.1:8000/api/films/${params.id}`)
     },
   }],
 }]);
@@ -32,3 +43,39 @@ ReactDOM.createRoot(document.getElementById('root')).render(
      <RouterProvider router={router} />
   </React.StrictMode>,
 )
+
+async function loginUser({ request }) {
+  console.log("request:", request)
+  const formData = await request.formData();
+  console.log("formData:", formData)
+  const {email, password} = Object.fromEntries(formData);
+  console.log(email, password)
+  const body = JSON.stringify({email, password});
+  const loginResponse = await fetch('http://127.0.0.1:8000/api/users/login/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body,
+  });
+  console.log(loginResponse)
+  if (loginResponse.ok) return redirect('/profile');
+  return {status: loginRes.status};
+}
+
+async function registerUser({ request }) {
+  const formData = await request.formData();
+  const {nombre, tel, email, password} = Object.fromEntries(formData);
+  const body = JSON.stringify({nombre, tel, email, password});
+  const registerResponse = await fetch('http://http://127.0.0.1:8000/api/users/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body,
+  });
+  if (registerResponse.ok) return redirect('/login');
+  return {status: registerResponse.status};
+}
+
+export { loginUser, registerUser };
