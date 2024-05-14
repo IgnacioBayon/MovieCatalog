@@ -32,7 +32,8 @@ class LoginView(generics.CreateAPIView):
                                 status=status.HTTP_200_OK)
             if not created:
                 response.set_cookie(
-                    key='session', value=token.key, secure=True, httponly=True, samesite='lax')
+                    key='session', value=token.key, secure=True, httponly=False, samesite='lax')
+                    # key='session', value=token.key, secure=True httponly=True, samesite='lax')
             return response
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)

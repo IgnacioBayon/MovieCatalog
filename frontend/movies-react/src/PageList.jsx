@@ -12,19 +12,16 @@ const PRODUCTS_PER_PAGE = 3;
 // var app = express();
 // app.use(cors({ origin: true, credentials: true }));
 
-function PageList({movieList, currentPage, setCurrentPage, minStock, setMinStock}) {
+function PageList({movieList, currentPage, setCurrentPage, filters, setFilters}) {
   return (<div className="container">
     <h2>Movies</h2>
     <Filters
-      movieList={movieList}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
-      // minStock={minStock}
-      // setMinStock={setMinStock}
+      filters={filters}
+      setFilters={setFilters}
     />
-    <MovieList productList={movieList}/>
-    {/* <MovieList productList={movieList} minStock={minStock}/> */}
-
+    <MovieList movieList={movieList}/>
   </div>);
 }
 
@@ -32,38 +29,64 @@ function PageList({movieList, currentPage, setCurrentPage, minStock, setMinStock
 function Filters({
   currentPage,
   setCurrentPage,
-  // minStock,
-  // setMinStock
+  filters,
+  setFilters
 }) {
+  const {title, description, genre, minRating} = filters;
+  const {setTitle, setDescription, setGenre, setMinRating} = setFilters;
+  return (<>
+    <div className="buttons">
+      <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+      <TitleFilter title={title} setTitle={setTitle}/>
+      {/* <RatingFilter minRating={minRating} setMinRating={setMinRating}/> */}
+    </div>
+  </>);
+}
 
+function PageFilter({currentPage, setCurrentPage}) {
   function changePage(page) {
     page = Math.max(INITIAL_PAGE, page);
     page = Math.min(page, END_PAGE);
     setCurrentPage(page);
   }
-
-  // function changeMinStock(minStock) {
-  //   minStock = Math.max(0, minStock);
-  //   setMinStock(minStock);
-  // }
-
-  return (<>
-    <div className="buttons">
-      <div className="PageFilter">
-        <button onClick={() => changePage(currentPage - 1)} disabled={currentPage===INITIAL_PAGE}>&lt;</button>
-        <input type="number" value={currentPage} onChange={(e) => changePage(e.target.value)}/>
-        <button onClick={() => changePage(currentPage + 1)} disabled={currentPage===END_PAGE}>&gt;</button>
-      </div>
-      {/* <div className="StockFilter">
-        <p>Stock Minimon
-          <input type="number" value={minStock} onChange={(e) => changeMinStock(e.target.value)} placeholder="Minimum Stock"/>
-        </p>
-      </div> */}
+  return (
+    <div className="PageFilter">
+      <button onClick={() => changePage(currentPage - 1)} disabled={currentPage===INITIAL_PAGE}>&lt;</button>
+      <input type="number" value={currentPage} onChange={(e) => changePage(e.target.value)}/>
+      <button onClick={() => changePage(currentPage + 1)} disabled={currentPage===END_PAGE}>&gt;</button>
     </div>
-  </>);
+  );
 }
 
-function MovieList({productList: movieList, minStock}) {
+function TitleFilter({title, setTitle}) {
+  function changeTitle(newTitle) {
+    setTitle(newTitle);
+  }
+  return (
+    <div className="TitleFilter">
+      <p>
+        <input type="text" value={title} onChange={(e) => changeTitle(e.target.value)} placeholder="Title"/>
+      </p>
+    </div>
+  );
+}
+
+function RatingFilter({minRating, setMinRating}) {
+  function changeMinRating(minStock) {
+    minRating = Math.max(0, minRating);
+    setMinRating(minStock);
+  }
+  return (
+    <div className="MinRatingFilter">
+      <p>
+        <input type="number" value={minRating} onChange={(e) => changeMinRating(e.target.value)} placeholder="Minimum Rating"/>
+      </p>
+    </div>
+  );
+}
+
+
+function MovieList({movieList, minStock}) {
   return (<div>
     {movieList.map(movie => 
       // Remove the link appearance
@@ -99,9 +122,25 @@ function Movie({movie}) {
 }
 
 function App() {
-  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [movieList, setMovieList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [genre, setGenre] = useState('');
   const [minRating, setMinRating] = useState(1);
+
+  const filters = {
+    title: title,
+    description: description,
+    genre: genre,
+    minRating: minRating
+  };
+  const setFilters = {
+    setTitle: setTitle,
+    setDescription: setDescription,
+    setGenre: setGenre,
+    setMinRating: setMinRating
+  };
 
   useEffect(() => {
     let skip = (currentPage - INITIAL_PAGE) * PRODUCTS_PER_PAGE;
@@ -113,12 +152,25 @@ function App() {
           throw new Error('Could not find the list');
         } 
         const data = await response.json();
-        console.log(data);
+        console.log("Data received from json", data)
         
+        // Apply Filters to data
+        data = data.filter(movie => 
+          movie.title.toLowerCase().includes(filters.title.toLowerCase())
+        );
+        data = data.filter(movie => 
+          movie.description.toLowerCase().includes(filters.description.toLowerCase())
+        );
+        data = data.filter(movie => 
+          movie.genre.toLowerCase().includes(filters.genre.toLowerCase())
+        );
+        // data = data.filter(movie => {
+        //   return movie.global_rating >= filters.minRating;
+        // });
+
+
         // Set the Movie List to the data fetched from the API
         setMovieList(data);
-
-        // setProductList(data.products);
       } catch (error) {
         console.error('Error while obtaining the list:', error);
       }
@@ -133,8 +185,8 @@ function App() {
         movieList={movieList}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        minStock={minRating}
-        setMinStock={setMinRating}
+        filters={filters}
+        setFilters={setFilters}
       />
       // <Footer/>
   )
