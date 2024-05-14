@@ -5,16 +5,24 @@ export default function Header() {
     // Check if the current path is the profile page
     const location = useLocation();
     const isProfilePage = location.pathname.endsWith("/profile/");
-
-    // Get the cookie to check if the user is logged in
-    const [cookie, setCookie] = useState("")
-    useEffect(() => {
-        setCookie(document.cookie);
-    }, []);
     
-
-    console.log("cookie", cookie);
-    console.log("isProfilePage", isProfilePage);
+    async function getIsLoggedIn() {
+        const response = await fetch("http://127.0.0.1:8000/api/users/me/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        });
+        // const data = await response.json();
+        // If response is not ok, return False, else return True
+        if (!response.ok) {
+            return false;
+        }
+        return true;
+    }
+    const isLoggedIn = getIsLoggedIn();
+    console.log("loggedIn", isLoggedIn);
     return (<header>
         <h1>FilmAffinity</h1>
         <nav>
@@ -23,7 +31,7 @@ export default function Header() {
               <NavLink to="/">Movie List</NavLink>
             </li>
             {/* If the user is logged in, show "Profile" or "Logout" based on the current path. If not, show "Sign in" */}
-            {cookie.includes("session") ? (
+            {isLoggedIn ? (
               <>
                 {isProfilePage ? (
                   <li>

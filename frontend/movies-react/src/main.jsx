@@ -20,6 +20,15 @@ const router = createBrowserRouter([{
     element: <PageRegister/>,
     action: registerUser,
   },{
+    path: "/logout",
+    action: async () => {
+      await fetch('http://127.0.0.1:8000/api/users/logout/', {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      return redirect('/');
+    }
+  },{
   path: "/",
   element: <App/>,
   children: [{
@@ -51,8 +60,8 @@ async function loginUser({ request }) {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({email, password}),
+    credentials: 'include',
   });
-  console.log(loginResponse)
   if (loginResponse.ok) return redirect('/profile/');
   return {status: loginResponse.status};
 }

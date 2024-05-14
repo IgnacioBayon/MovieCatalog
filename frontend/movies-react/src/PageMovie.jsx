@@ -4,8 +4,6 @@ import { useLoaderData } from "react-router-dom";
 
 export default function PageMovie() {
   let movie = useLoaderData();
-  console.log(movie)
-
   return (
     <div className="container">
       <div className="movie-details" id="movieDetails">
@@ -13,18 +11,10 @@ export default function PageMovie() {
         <div className="info">
           <h2>{movie.title}</h2>
           <p>{movie.description}</p>
-          <p>
-            <strong>Genre:</strong> <span>{movie.genre}</span>
-          </p>
-          <p>
-            <strong>Director:</strong> <span>{movie.director}</span>
-          </p>
-          <p>
-            <strong>Release Year:</strong> <span>{movie.release_year}</span>
-          </p>
-          <p>
-          <strong>Rating:</strong> <span>{movie.global_rating}</span>
-          </p>
+          <p><strong>Genre:</strong> <span>{movie.genre}</span></p>
+          <p><strong>Director:</strong> <span>{movie.director}</span></p>
+          <p><strong>Release Year:</strong> <span>{movie.release_year}</span></p>
+          <p><strong>Rating:</strong> <span>{movie.global_rating}</span></p>
         </div>
       </div>
     </div>
