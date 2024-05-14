@@ -27,3 +27,31 @@ class FilmView(generics.RetrieveUpdateDestroyAPIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         else:
             return super().handle_exception(exc)
+
+
+class EditFilmView(generics.UpdateAPIView):
+    # Create a view to edit the film fields using patch
+    # When I go to edit the film, I want the fields to be written already
+    # so I can edit them and not have to write them again
+    serializer_class = serializers.FilmSerializer
+    queryset = serializers.FilmSerializer.Meta.model.objects.all()
+
+    def handle_exception(self, exc):
+        if isinstance(exc, ObjectDoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return super().handle_exception(exc)
+        
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+
+class FilmsView(generics.ListAPIView):
+    serializer_class = serializers.FilmSerializer
+    queryset = serializers.FilmSerializer.Meta.model.objects.all()
+
+    def handle_exception(self, exc):
+        return super().handle_exception(exc)
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
