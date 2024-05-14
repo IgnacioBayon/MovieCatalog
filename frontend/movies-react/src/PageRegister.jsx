@@ -5,25 +5,21 @@ export default function PageRegister() {
     <h2>Register</h2>
     <Form method="post">
         <div className="form-control">
-            <label htmlFor="username">Name</label>
-            <input type="text" id="nombre" placeholder="Username" required="" />
+            <label htmlFor="nombre">Name</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Username" required="" />
         </div>
         <div className="form-control">
             <label htmlFor="tel">Telephone</label>
-            <input type="tel" id="tel" placeholder="Telephone" required="" />
+            <input type="tel" id="tel" name="tel" placeholder="Telephone" required="" />
         </div>
         <div className="form-control">
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" placeholder="Email" required="" />
+            <input type="email" id="email" name="email" placeholder="Email" required="" />
         </div>
         <div className="form-control">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" placeholder="Password" required="" />
+            <input type="password" id="password" name="password" placeholder="Password" required="" />
         </div>
-        {/* <div className="form-control">
-            <label htmlFor="password">Confirm Password</label>
-            <input type="password" id="password" placeholder="Password" required="" />
-        </div> */}
         <button type="submit">Register</button>
     </Form>
   </div>);

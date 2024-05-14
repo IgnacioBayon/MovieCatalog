@@ -1,5 +1,4 @@
 import { Form, NavLink, useNavigation, useActionData, useLocation } from "react-router-dom";
-import { loginUser } from "./main.jsx";
 
 export default function PageLogin() {
     return (<div className="container">

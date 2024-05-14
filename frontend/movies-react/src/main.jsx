@@ -45,37 +45,26 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 )
 
 async function loginUser({ request }) {
-  console.log("request:", request)
   const formData = await request.formData();
-  console.log("formData:", formData)
   const {email, password} = Object.fromEntries(formData);
-  console.log(email, password)
-  const body = JSON.stringify({email, password});
   const loginResponse = await fetch('http://127.0.0.1:8000/api/users/login/', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body,
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email, password}),
   });
   console.log(loginResponse)
   if (loginResponse.ok) return redirect('/profile');
-  return {status: loginRes.status};
+  return {status: loginResponse.status};
 }
 
 async function registerUser({ request }) {
   const formData = await request.formData();
   const {nombre, tel, email, password} = Object.fromEntries(formData);
-  const body = JSON.stringify({nombre, tel, email, password});
-  const registerResponse = await fetch('http://http://127.0.0.1:8000/api/users/', {
+  const registerResponse = await fetch('http://127.0.0.1:8000/api/users/', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body,
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({nombre, tel, email, password}),
   });
   if (registerResponse.ok) return redirect('/login');
   return {status: registerResponse.status};
 }
-
-export { loginUser, registerUser };
