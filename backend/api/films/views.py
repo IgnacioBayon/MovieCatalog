@@ -28,7 +28,6 @@ class FilmView(generics.RetrieveUpdateDestroyAPIView):
         else:
             return super().handle_exception(exc)
 
-
 class EditFilmView(generics.UpdateAPIView):
     # Create a view to edit the film fields using patch
     # When I go to edit the film, I want the fields to be written already
@@ -52,6 +51,29 @@ class FilmsView(generics.ListAPIView):
 
     def handle_exception(self, exc):
         return super().handle_exception(exc)
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        title = self.request.query_params.get('title', None)
+        description = self.request.query_params.get('description', None)
+        genre = self.request.query_params.get('genre', None)
+        # rating = self.request.query_params.get('rating', None)
+
+        print("Queryset 1", queryset)
+        if title:
+            queryset = queryset.filter(title__icontains=title)
+        print("Queryset 2", queryset)
+        if description:
+            queryset = queryset.filter(description__icontains=description)
+        print("Queryset 3", queryset)
+        if genre:
+            queryset = queryset.filter(genre__icontains=genre)
+        print("Queryset 4", queryset)
+        # if rating:
+        #     queryset = queryset.filter(rating >= rating)
+        
+        return queryset
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

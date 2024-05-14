@@ -53,7 +53,7 @@ async function loginUser({ request }) {
     body: JSON.stringify({email, password}),
   });
   console.log(loginResponse)
-  if (loginResponse.ok) return redirect('/profile');
+  if (loginResponse.ok) return redirect('/profile/');
   return {status: loginResponse.status};
 }
 
@@ -65,6 +65,6 @@ async function registerUser({ request }) {
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({nombre, tel, email, password}),
   });
-  if (registerResponse.ok) return redirect('/login');
+  if (registerResponse.ok) return redirect('/login/');
   return {status: registerResponse.status};
 }

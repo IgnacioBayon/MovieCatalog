@@ -7,24 +7,15 @@ const INITIAL_PAGE = 1;
 const END_PAGE = 20;
 const PRODUCTS_PER_PAGE = 3;
 
-// var express = require("express");
-// var cors = require("cors");
-// var app = express();
-// app.use(cors({ origin: true, credentials: true }));
 
-function PageList({movieList, currentPage, setCurrentPage, minStock, setMinStock}) {
+function PageList({movieList, currentPage, setCurrentPage}) {
   return (<div className="container">
     <h2>Movies</h2>
     <Filters
-      movieList={movieList}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
-      // minStock={minStock}
-      // setMinStock={setMinStock}
     />
-    <MovieList productList={movieList}/>
-    {/* <MovieList productList={movieList} minStock={minStock}/> */}
-
+    <MovieList movieList={movieList}/>
   </div>);
 }
 
@@ -32,38 +23,16 @@ function PageList({movieList, currentPage, setCurrentPage, minStock, setMinStock
 function Filters({
   currentPage,
   setCurrentPage,
-  // minStock,
-  // setMinStock
 }) {
-
-  function changePage(page) {
-    page = Math.max(INITIAL_PAGE, page);
-    page = Math.min(page, END_PAGE);
-    setCurrentPage(page);
-  }
-
-  // function changeMinStock(minStock) {
-  //   minStock = Math.max(0, minStock);
-  //   setMinStock(minStock);
-  // }
-
   return (<>
     <div className="buttons">
-      <div className="PageFilter">
-        <button onClick={() => changePage(currentPage - 1)} disabled={currentPage===INITIAL_PAGE}>&lt;</button>
-        <input type="number" value={currentPage} onChange={(e) => changePage(e.target.value)}/>
-        <button onClick={() => changePage(currentPage + 1)} disabled={currentPage===END_PAGE}>&gt;</button>
-      </div>
-      {/* <div className="StockFilter">
-        <p>Stock Minimon
-          <input type="number" value={minStock} onChange={(e) => changeMinStock(e.target.value)} placeholder="Minimum Stock"/>
-        </p>
-      </div> */}
+      <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
     </div>
   </>);
 }
 
-function MovieList({productList: movieList, minStock}) {
+
+function MovieList({movieList}) {
   return (<div>
     {movieList.map(movie => 
       // Remove the link appearance
@@ -80,28 +49,18 @@ function Movie({movie}) {
       <img src={movie.image_url} alt="Thumbnail" id="thumbnail"/>
       <div className="info">
         <h2>{movie.title}</h2>
-        {/* <p>{movie.description}</p> */}
-        <p>
-          <strong>Genre:</strong> <span>{movie.genre}</span>
-        </p>
-        <p>
-          <strong>Director:</strong> <span>{movie.director}</span>
-        </p>
-        <p>
-          <strong>Release Year:</strong> <span>{movie.release_year}</span>
-        </p>
-        <p>
-          <strong>Rating:</strong> <span>{movie.global_rating}</span>
-        </p>
+        <p><strong>Genre:</strong> <span>{movie.genre}</span></p>
+        <p><strong>Director:</strong> <span>{movie.director}</span></p>
+        <p><strong>Release Year:</strong> <span>{movie.release_year}</span></p>
+        <p><strong>Rating:</strong> <span>{movie.global_rating}</span></p>
       </div>
     </div>
   );
 }
 
 function App() {
-  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [movieList, setMovieList] = useState([]);
-  const [minRating, setMinRating] = useState(1);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
 
   useEffect(() => {
     let skip = (currentPage - INITIAL_PAGE) * PRODUCTS_PER_PAGE;
@@ -113,12 +72,9 @@ function App() {
           throw new Error('Could not find the list');
         } 
         const data = await response.json();
-        console.log(data);
-        
+
         // Set the Movie List to the data fetched from the API
         setMovieList(data);
-
-        // setProductList(data.products);
       } catch (error) {
         console.error('Error while obtaining the list:', error);
       }
@@ -128,15 +84,11 @@ function App() {
   }, [currentPage, minRating]);
 
   return (
-      // <Header/>
       <PageList
         movieList={movieList}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        minStock={minRating}
-        setMinStock={setMinRating}
       />
-      // <Footer/>
   )
 }
 

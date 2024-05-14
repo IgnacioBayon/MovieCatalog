@@ -8,7 +8,7 @@ class FilmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Film
-        fields = ["id", "title", "genre", "description", "director", "release_year", "image_url", "global_rating"]
+        fields = ["id", "title", "genre", "description", "director", "release_year", "image_url"]
 
     def create(self, validated_data):
         return models.Film.objects.create(**validated_data)
