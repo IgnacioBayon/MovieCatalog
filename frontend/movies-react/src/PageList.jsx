@@ -49,7 +49,6 @@ function Movie({movie}) {
       <img src={movie.image_url} alt="Thumbnail" id="thumbnail"/>
       <div className="info">
         <h2>{movie.title}</h2>
-        {/* <p>{movie.description}</p> */}
         <p><strong>Genre:</strong> <span>{movie.genre}</span></p>
         <p><strong>Director:</strong> <span>{movie.director}</span></p>
         <p><strong>Release Year:</strong> <span>{movie.release_year}</span></p>
