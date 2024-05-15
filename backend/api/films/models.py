@@ -20,6 +20,7 @@ class Film(models.Model):
     def get_rating(self):
         # I want to get the average rating of the film
         ratings = Rating.objects.filter(film=self)
+        print(ratings)
         if ratings.count() == 0:
             return 0
         else:
@@ -37,3 +38,7 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.film.title} - {self.user.username} - {self.rating}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.film.save()
