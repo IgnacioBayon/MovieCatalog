@@ -12,30 +12,23 @@ function PageList({movieList, currentPage, setCurrentPage, filters, setFilters})
   return (<div className="container">
     <h2>Movies</h2>
     <Filters
-      currentPage={currentPage}
-      setCurrentPage={setCurrentPage}
       filters={filters}
       setFilters={setFilters}
     />
     <MovieList movieList={movieList}/>
+    <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
   </div>);
 }
 
-function Filters({
-  currentPage,
-  setCurrentPage,
-  filters,
-  setFilters
-}) {
-  const {title, description, genre, minRating} = filters;
-  const {setTitle, setDescription, setGenre, setMinRating} = setFilters;
+function Filters({ filters, setFilters }) {
+  const {title, description, genre, rating} = filters;
+  const {setTitle, setDescription, setGenre, setRating} = setFilters;
   return (<>
-    <div className="buttons">
-      <PageFilter currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+    <div className="filters">
       <TitleFilter title={title} setTitle={setTitle}/>
       <DescriptionFilter description={description} setDescription={setDescription}/>
       <GenreFilter genre={genre} setGenre={setGenre}/>
-      {/* <RatingFilter minRating={minRating} setMinRating={setMinRating}/> */}
+      <RatingFilter rating={rating} setRating={setRating}/>
     </div>
   </>);
 }
@@ -50,7 +43,8 @@ function PageFilter({currentPage, setCurrentPage}) {
   return (
     <div className="PageFilter">
       <button onClick={() => changePage(currentPage - 1)} disabled={currentPage===INITIAL_PAGE}>&lt;</button>
-      <input type="number" value={currentPage} onChange={(e) => changePage(e.target.value)}/>
+      <p>{currentPage}</p>
+      {/* <input type="number" value={currentPage} onChange={(e) => changePage(e.target.value)}/> */}
       <button onClick={() => changePage(currentPage + 1)} disabled={currentPage===END_PAGE}>&gt;</button>
     </div>
   );
@@ -90,19 +84,17 @@ function GenreFilter({genre, setGenre}) {
 }
 
 
-// function RatingFilter({minRating, setMinRating}) {
-//   function changeMinRating(minStock) {
-//     minRating = Math.max(0, minRating);
-//     setMinRating(minStock);
-//   }
-//   return (
-//     <div className="MinRatingFilter">
-//       <p>
-//         <input type="number" value={minRating} onChange={(e) => changeMinRating(e.target.value)} placeholder="Minimum Rating"/>
-//       </p>
-//     </div>
-//   );
-// }
+function RatingFilter({rating, setRating}) {
+  console.log("Rating", rating)
+  return (
+    <div className="MinRatingFilter">
+      <p>
+        <strong>Rating:<br/></strong>
+        <input type="number" value={rating} onChange={(e) => setRating(Math.max(0, Math.min(e.target.value, 5)))} placeholder="Minimum Rating"/>
+      </p>
+    </div>
+  );
+}
 
 
 function MovieList({movieList}) {
@@ -137,7 +129,7 @@ function App() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [genre, setGenre] = useState('');
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(null);
   const filters = {
     title: title,
     description: description,
@@ -161,7 +153,7 @@ function App() {
         if (title) params.append('title', title);
         if (description) params.append('description', description);
         if (genre) params.append('genre', genre);
-        // if (rating) params.append('rating', rating);
+        if (rating) params.append('rating', rating);
         
         url.search = params.toString();
         const response = await fetch(url);
@@ -188,7 +180,7 @@ function App() {
         setCurrentPage={setCurrentPage}
         filters={filters}
         setFilters={setFilters}
-      />
+      />      
   )
 }
 
