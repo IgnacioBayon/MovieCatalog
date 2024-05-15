@@ -41,7 +41,7 @@ class LoginView(generics.CreateAPIView):
                     secure=True,
                     httponly=False,
                     samesite='None',
-                    expires=expires_at
+                    # expires=expires_at
                 )
             return response
         else:
@@ -53,7 +53,7 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         token_key = self.request.COOKIES.get('session')
-        print(f"Token : {self.request.COOKIES}")
+        print(f"Token UsuarioView: {self.request.COOKIES}")
         try:
             token = Token.objects.get(key=token_key)
         except Token.DoesNotExist:
@@ -76,6 +76,7 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
 class LogoutView(generics.DestroyAPIView):
     def delete(self, request):
         token_key = request.COOKIES.get('session')
+        print(f"Token LogoutView: {request.COOKIES}")
         try:
             token = Token.objects.get(key=token_key)
             token.delete()

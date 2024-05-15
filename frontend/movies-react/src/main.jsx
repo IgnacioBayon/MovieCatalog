@@ -7,6 +7,7 @@ import PageError from './PageError.jsx'
 import PageProfile from './PageProfile.jsx'
 import PageLogin from './PageLogin.jsx'
 import PageRegister from './PageRegister.jsx'
+import PageLogout from './PageLogout.jsx'
 import './index.css'
 import { redirect, createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -21,12 +22,13 @@ const router = createBrowserRouter([{
     action: registerUser,
   },{
     path: "/logout",
+    element: <PageLogout/>,
     action: async () => {
       await fetch('http://127.0.0.1:8000/api/users/logout/', {
         method: 'DELETE',
         credentials: 'include',
       });
-      return redirect('/');
+      return redirect('/login');
     }
   },{
   path: "/",
@@ -62,7 +64,7 @@ async function loginUser({ request }) {
     body: JSON.stringify({email, password}),
     credentials: 'include',
   });
-  if (loginResponse.ok) return redirect('/profile/');
+  if (loginResponse.ok) return redirect('/profile');
   return {status: loginResponse.status};
 }
 
@@ -74,6 +76,6 @@ async function registerUser({ request }) {
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({nombre, tel, email, password}),
   });
-  if (registerResponse.ok) return redirect('/login/');
+  if (registerResponse.ok) return redirect('/login');
   return {status: registerResponse.status};
 }

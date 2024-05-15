@@ -4,24 +4,35 @@ import { useEffect, useState } from 'react';
 export default function Header() {
     // Check if the current path is the profile page
     const location = useLocation();
-    const isProfilePage = location.pathname.endsWith("/profile/");
+    const isProfilePage = location.pathname.endsWith("/profile");
+    const [isLoggedIn, setIsLoggedIn] = useState(null); // Use state to store login status
     
-    async function getIsLoggedIn() {
-        const response = await fetch("http://127.0.0.1:8000/api/users/me/", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-        });
-        // const data = await response.json();
-        // If response is not ok, return False, else return True
-        if (!response.ok) {
-            return false;
+    useEffect(() => {
+      async function getIsLoggedIn() {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/users/me/", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+
+            if (!response.ok) {
+                setIsLoggedIn(false);
+                return;
+            }
+            const data = await response.json();
+            console.log("data: ", data);
+            setIsLoggedIn(true);
+        } catch (error) {
+            console.error("Error fetching user info:", error);
+            setIsLoggedIn(false);
         }
-        return true;
-    }
-    const isLoggedIn = getIsLoggedIn();
+      }
+      getIsLoggedIn();
+    }, []);
+
     console.log("loggedIn", isLoggedIn);
     return (<header>
         <h1>FilmAffinity</h1>
@@ -35,17 +46,17 @@ export default function Header() {
               <>
                 {isProfilePage ? (
                   <li>
-                    <NavLink to="/logout/">Logout</NavLink>
+                    <NavLink to="/logout">Logout</NavLink>
                   </li>
                 ) : (
                   <li>
-                    <NavLink to="/profile/">Profile</NavLink>
+                    <NavLink to="/profile">Profile</NavLink>
                   </li>
                 )}
               </>
             ) : (
               <li>
-                  <NavLink to="/login/">Sign in</NavLink>
+                  <NavLink to="/login">Sign in</NavLink>
               </li>
             )}
           </ul>
