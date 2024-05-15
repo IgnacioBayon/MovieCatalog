@@ -3,7 +3,6 @@ import { Form, NavLink, useNavigation, useActionData, useLocation } from "react-
 export default function PageLogin() {
     return (<div className="container">
     <h2>Login</h2>
-    {/* <Form method="post" onSubmit={handleFormSubmit}> */}
     <Form method="post">
         <div className="form-control">
             <label htmlFor="email">Email</label>

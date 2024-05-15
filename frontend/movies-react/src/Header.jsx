@@ -23,7 +23,6 @@ export default function Header() {
                 return;
             }
             const data = await response.json();
-            console.log("data: ", data);
             setIsLoggedIn(true);
         } catch (error) {
             console.error("Error fetching user info:", error);
@@ -33,7 +32,6 @@ export default function Header() {
       getIsLoggedIn();
     }, []);
 
-    console.log("loggedIn", isLoggedIn);
     return (<header>
         <h1>FilmAffinity</h1>
         <nav>
