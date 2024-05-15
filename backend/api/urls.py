@@ -23,4 +23,7 @@ urlpatterns = [
     path("api/films/edit/<str:pk>", viewsFilms.EditFilmView.as_view(), name="film"),
     # Create a path for all the films
     path("api/films/all/", viewsFilms.FilmsView.as_view(), name="films"),
+    path("api/films/ratings/", viewsFilms.RatingView.as_view(), name="create_rating"),
+    path("api/films/ratings/all/", viewsFilms.RatingsView.as_view(), name="ratings"),
+
 ]
