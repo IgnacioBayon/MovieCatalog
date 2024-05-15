@@ -7,6 +7,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from api.users import serializers
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework.exceptions import AuthenticationFailed
+from django.utils import timezone
+from datetime import timedelta
 
 
 class RegistroView(generics.CreateAPIView):
@@ -30,8 +32,17 @@ class LoginView(generics.CreateAPIView):
             token, created = Token.objects.get_or_create(user=user)
             response = Response({'token': token.key},
                                 status=status.HTTP_200_OK)
-            response.set_cookie(
-                key='session', value=token.key, secure=True, httponly=False, samesite='lax')
+            if created:
+                # Permanent cookie
+                expires_at = timezone.now() + timedelta(days=14)
+                response.set_cookie(
+                    key='session',
+                    value=token.key,
+                    secure=True,
+                    httponly=False,
+                    samesite='None',
+                    # expires=expires_at
+                )
             return response
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -42,6 +53,7 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         token_key = self.request.COOKIES.get('session')
+        print(f"Token UsuarioView: {self.request.COOKIES}")
         try:
             token = Token.objects.get(key=token_key)
         except Token.DoesNotExist:
@@ -64,6 +76,7 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
 class LogoutView(generics.DestroyAPIView):
     def delete(self, request):
         token_key = request.COOKIES.get('session')
+        print(f"Token LogoutView: {request.COOKIES}")
         try:
             token = Token.objects.get(key=token_key)
             token.delete()
