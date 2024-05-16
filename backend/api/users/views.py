@@ -41,7 +41,7 @@ class LoginView(generics.CreateAPIView):
                     secure=True,
                     httponly=False,
                     samesite='None',
-                    # expires=expires_at
+                    expires=expires_at
                 )
             return response
         else:

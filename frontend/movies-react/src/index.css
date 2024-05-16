@@ -1,5 +1,5 @@
 header {
-  background-color: #333;
+  background-color: #447CAD;
   color: #fff;
   padding: 10px 20px;
   text-align: left; 
@@ -22,15 +22,19 @@ nav ul li {
 nav ul li a {
   color: #fff;
   text-decoration: none;
+  padding: 5px 10px;
+
 }
 
 nav ul li a:hover { 
   color: #ddd;
-  background-color: #777777;
+  background-color: #a4d0f7;
+  border-radius: 5px;
+  padding: 5px 10px;
 }
 
 footer {
-  background-color: #333;
+  background-color: #447CAD;
   color: #fff;
   text-align: center;
   padding: 10px 0;
@@ -63,7 +67,11 @@ h1 {
   text-align: center;
 }
 
-.product-details {
+h2 {
+  text-align: center;
+}
+
+.movie-details {
   display: flex;
   margin-top: 20px;
 }
@@ -134,7 +142,50 @@ button[type="submit"]:hover {
   text-align: center;
 }
 
+.filters-container {
+  background-color: #cbe8ff;
+  padding: 20px 20px;
+  /* Order of margin */
+  /* top right bottom left */
+  margin: 30px 20px 30px 20px;
+  border-radius: 20px;
+}
+
 .filters {
   display: flex;
   justify-content: center;
+  gap: 30px;
+}
+
+.filters p strong{
+  display: flex;
+  margin-bottom: 5px;
+  justify-content: center;  
+}
+
+.filters input {
+  text-align: center;
+  width: 150px;
+}
+
+#filters {
+  display: flex;
+  justify-content: center;
+  margin: 0px;
+  margin-bottom: 10px;
+}
+
+.PageFilter {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* .PageFilter input[type="number"] {
+  width: 35px;
+  text-align: center;
+} */
+.PageFilter p {
+  margin-left: 10px;
+  margin-right: 10px;
 }

@@ -8,8 +8,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Usuario
-        fields = ["nombre", "tel", "email", "password"]
-        extra_kwargs = {"password": {"write_only": True}}
+        fields = ["id", "nombre", "tel", "email", "password"]
+        extra_kwargs = {
+            "password": {"write_only": True},
+            "id": {"read_only": True},
+        }
 
     def validate_password(self, value):
         valid_password = True
