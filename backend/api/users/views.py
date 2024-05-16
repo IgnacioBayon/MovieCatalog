@@ -27,24 +27,27 @@ class LoginView(generics.CreateAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.validated_data
-            token, created = Token.objects.get_or_create(user=user)
-            response = Response({'token': token.key},
-                                status=status.HTTP_200_OK)
-            if created:
-                # Permanent cookie
-                expires_at = timezone.now() + timedelta(days=14)
-                response.set_cookie(
-                    key='session',
-                    value=token.key,
-                    secure=True,
-                    httponly=False,
-                    samesite='None',
-                    expires=expires_at
-                )
-            return response
-        else:
+        try:
+            if serializer.is_valid():
+                user = serializer.validated_data
+                token, created = Token.objects.get_or_create(user=user)
+                response = Response({'token': token.key},
+                                    status=status.HTTP_200_OK)
+                if created:
+                    # Permanent cookie
+                    expires_at = timezone.now() + timedelta(days=14)
+                    response.set_cookie(
+                        key='session',
+                        value=token.key,
+                        secure=True,
+                        httponly=False,
+                        samesite='None',
+                        expires=expires_at
+                    )
+                return response
+            else:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        except AuthenticationFailed:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
@@ -53,7 +56,6 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         token_key = self.request.COOKIES.get('session')
-        print(f"Token UsuarioView: {self.request.COOKIES}")
         try:
             token = Token.objects.get(key=token_key)
         except Token.DoesNotExist:
@@ -76,7 +78,6 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
 class LogoutView(generics.DestroyAPIView):
     def delete(self, request):
         token_key = request.COOKIES.get('session')
-        print(f"Token LogoutView: {request.COOKIES}")
         try:
             token = Token.objects.get(key=token_key)
             token.delete()

@@ -56,7 +56,6 @@ function StarComponent({ movieId, profileData, rating, setRating }) {
       postRating({ movieId, profileData, rating: rate });
     }
   }
-  console.log("StarComponent rating", rating)
 
   return (
     <div className='App'>
@@ -75,7 +74,6 @@ function StarComponent({ movieId, profileData, rating, setRating }) {
 
 async function getRating({ setRating, movieId, profileData }) {
   const response = await fetch(`http://127.0.0.1:8000/api/films/ratings/all/?film=${movieId}&user=${profileData.id}`);
-  console.log("response", response.ok)
   if (!response.ok) {
     setRating(0);
     return
