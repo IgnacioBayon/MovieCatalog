@@ -135,14 +135,11 @@ class RatingsView(generics.ListAPIView):
         
         film = self.request.query_params.get('film', None)
         user = self.request.query_params.get('user', None)
-        rating = self.request.query_params.get('rating', None)
 
         if film:
-            queryset = queryset.filter(film__title__icontains=film)
+            queryset = queryset.filter(film=film)
         if user:
-            queryset = queryset.filter(user__username__icontains=user)
-        if rating:
-            queryset = queryset.filter(rating__gte=rating)
+            queryset = queryset.filter(user=user)
         
         return queryset
     

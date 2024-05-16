@@ -9,7 +9,7 @@ export default function Header() {
     
     
     useEffect(() => {
-      getIsLoggedIn({ setIsLoggedIn });
+        getIsLoggedIn({ setIsLoggedIn });
     }, []);
 
     return (<header>
@@ -43,7 +43,7 @@ export default function Header() {
 }
 
 
-export async function getIsLoggedIn({ setIsLoggedIn }) {
+async function getIsLoggedIn({ setIsLoggedIn }) {
   try {
       const response = await fetch("http://127.0.0.1:8000/api/users/me/", {
           method: "GET",
@@ -52,15 +52,12 @@ export async function getIsLoggedIn({ setIsLoggedIn }) {
           },
           credentials: "include",
       });
-
       if (!response.ok) {
-          setIsLoggedIn(false);
-          return;
+        setIsLoggedIn(false);
+        return
       }
-      const data = await response.json();
       setIsLoggedIn(true);
   } catch (error) {
-      console.error("Error fetching user info:", error);
       setIsLoggedIn(false);
   }
 }
