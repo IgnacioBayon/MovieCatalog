@@ -95,7 +95,6 @@ async function changeProfileData({ request }) {
       password: password}),
     credentials: 'include',
   });
-  console.log(response.ok)
   if (response.ok) return redirect('/profile');
   return {status: response.status};
 }

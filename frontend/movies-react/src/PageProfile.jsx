@@ -39,6 +39,5 @@ export async function getProfileData({ setProfileData }) {
       credentials: "include",
   });
   const data = await response.json();
-  console.log("PageProfile data", data);
   setProfileData(data);
 }

@@ -88,7 +88,6 @@ async function postRating({ movieId, profileData, rating}) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({film: movieId, user: profileData.id, rating}),
       });
-  console.log("registerResponse", registerResponse.ok)
   if (registerResponse.ok) {
     window.location.reload();
   }
