@@ -79,7 +79,12 @@ async function getRating({ setRating, movieId, profileData }) {
     return
   }
   const data = await response.json();
-  setRating(data[0].rating);
+  if (data.length > 0) {
+    setRating(data[0].rating);
+  }
+  else {
+    setRating(0);
+  }
 }
 
 async function postRating({ movieId, profileData, rating}) {
@@ -93,8 +98,6 @@ async function postRating({ movieId, profileData, rating}) {
   }
   return registerResponse;
 }
-
-// ///////////////////////////////////////////////////////////
 
 async function getProfileData({ setProfileData }) {
   const response = await fetch("http://127.0.0.1:8000/api/users/me/", {

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 // import Header from "./Header.jsx"
 // import Footer from "./Footer.jsx"
+import { Rating } from 'react-simple-star-rating'
 
 const INITIAL_PAGE = 1;
-const END_PAGE = 20;
 const FILMS_PER_PAGE = 5;
 
 
@@ -40,7 +40,6 @@ function Filters({ filters, setFilters }) {
 function PageFilter({currentPage, setCurrentPage}) {
   function changePage(page) {
     page = Math.max(INITIAL_PAGE, page);
-    page = Math.min(page, END_PAGE);
     setCurrentPage(page);
   }
   return (
@@ -48,7 +47,7 @@ function PageFilter({currentPage, setCurrentPage}) {
       <button onClick={() => changePage(currentPage - 1)} disabled={currentPage===INITIAL_PAGE}>&lt;</button>
       <p>{currentPage}</p>
       {/* <input type="number" value={currentPage} onChange={(e) => changePage(e.target.value)}/> */}
-      <button onClick={() => changePage(currentPage + 1)} disabled={currentPage===END_PAGE}>&gt;</button>
+      <button onClick={() => changePage(currentPage + 1)}>&gt;</button>
     </div>
   );
 }
@@ -121,6 +120,9 @@ function Movie({movie}) {
         <p><strong>Release Year:</strong> <span>{movie.release_year}</span></p>
         <p><strong>Avg. Rating:</strong> <span>{movie.global_rating}</span></p>
       </div>
+      <div className="rating-container">
+        <Rating initialValue={movie.global_rating} readonly/>
+      </div>
     </div>
   );
 }
@@ -158,7 +160,6 @@ function App() {
         if (rating) params.append('rating', rating);
         params.append('limit', FILMS_PER_PAGE);
         params.append('skip', skip);
-        console.log(skip)
         
         url.search = params.toString();
         const response = await fetch(url);

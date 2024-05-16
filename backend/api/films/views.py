@@ -1,16 +1,26 @@
 from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
+from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticatedOrReadOnly, IsAuthenticated
 from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from api.films import serializers
 from api.users import serializers as userSerializers
 
 
+# class IsSuperUser(BasePermission):
+#     def has_permission(self, request, view):
+#         print("User is superuser: ", request.user.is_superuser)
+#         print("User: ", request.user)
+#         if request.method in SAFE_METHODS:
+#             return True
+#         return request.user and request.user.is_superuser
+
 # Create your views here.
 class CreateFilmView(generics.CreateAPIView):
     serializer_class = serializers.FilmSerializer
+    # permission_classes = [IsSuperUser]
+    permission_classes = [IsAuthenticated]
 
     def handle_exception(self, exc):
         if isinstance(exc, IntegrityError):
@@ -22,6 +32,8 @@ class CreateFilmView(generics.CreateAPIView):
 class FilmView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.FilmSerializer
     queryset = serializers.FilmSerializer.Meta.model.objects.all()
+    # permission_classes = [IsSuperUser]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def handle_exception(self, exc):
         if isinstance(exc, ObjectDoesNotExist):
