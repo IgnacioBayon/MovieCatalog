@@ -20,7 +20,6 @@ class Film(models.Model):
     def get_rating(self):
         # I want to get the average rating of the film
         ratings = Rating.objects.filter(film=self)
-        print(ratings)
         if ratings.count() == 0:
             return 0
         else:
