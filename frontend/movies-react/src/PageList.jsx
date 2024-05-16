@@ -127,16 +127,6 @@ function Movie({movie}) {
   );
 }
 
-function StarComponent(rating) {
-  console.log(rating)
-  return (
-    <div className='App'>
-      
-    </div>
-  )
-}
-
-
 function App() {
   const [movieList, setMovieList] = useState([]);
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
@@ -170,7 +160,6 @@ function App() {
         if (rating) params.append('rating', rating);
         params.append('limit', FILMS_PER_PAGE);
         params.append('skip', skip);
-        console.log(skip)
         
         url.search = params.toString();
         const response = await fetch(url);
