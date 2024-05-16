@@ -78,7 +78,7 @@ class FilmsView(generics.ListAPIView):
 
 
 # I want to have a view for the rating. I want to be able to create a rating or update it if it already exists
-class RatingView(generics.CreateAPIView):
+class CreateRatingView(generics.CreateAPIView):
     serializer_class = serializers.RatingSerializer
     
     def handle_exception(self, exc):
@@ -111,6 +111,16 @@ class RatingView(generics.CreateAPIView):
         
         return Response(status=status.HTTP_201_CREATED)
 
+
+class RatingView(generics.RetrieveAPIView):
+    serializer_class = serializers.RatingSerializer
+    queryset = serializers.RatingSerializer.Meta.model.objects.all()
+
+    def handle_exception(self, exc):
+        if isinstance(exc, ObjectDoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return super().handle_exception(exc)
 
 
 class RatingsView(generics.ListAPIView):
