@@ -4,18 +4,7 @@ import { NavLink } from "react-router-dom";
 export default function PageProfile() {
     const [profileData, setProfileData] = useState({});
     useEffect(() => {
-      async function getProfileData() {
-        const response = await fetch("http://127.0.0.1:8000/api/users/me/", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-        });
-        const data = await response.json();
-        setProfileData(data);
-      }
-      getProfileData();
+      getProfileData({ setProfileData });
     }, []);
 
     return (
@@ -39,3 +28,16 @@ export default function PageProfile() {
       </div>
     );
 };
+
+
+export async function getProfileData({ setProfileData }) {
+  const response = await fetch("http://127.0.0.1:8000/api/users/me/", {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      credentials: "include",
+  });
+  const data = await response.json();
+  setProfileData(data);
+}

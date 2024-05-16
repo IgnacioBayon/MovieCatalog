@@ -24,11 +24,14 @@ function Filters({ filters, setFilters }) {
   const {title, description, genre, rating} = filters;
   const {setTitle, setDescription, setGenre, setRating} = setFilters;
   return (<>
-    <div className="filters">
-      <TitleFilter title={title} setTitle={setTitle}/>
-      <DescriptionFilter description={description} setDescription={setDescription}/>
-      <GenreFilter genre={genre} setGenre={setGenre}/>
-      <RatingFilter rating={rating} setRating={setRating}/>
+    <div className = "filters-container">
+      <h3 id="filters">Filters</h3>
+      <div className="filters">
+        <TitleFilter title={title} setTitle={setTitle}/>
+        <DescriptionFilter description={description} setDescription={setDescription}/>
+        <GenreFilter genre={genre} setGenre={setGenre}/>
+        <RatingFilter rating={rating} setRating={setRating}/>
+      </div>
     </div>
   </>);
 }
@@ -54,7 +57,7 @@ function TitleFilter({title, setTitle}) {
   return (
     <div className="TitleFilter">
       <p>
-        <strong>Title:<br/></strong>
+        <strong>Title<br/></strong>
         <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Title"/>
       </p>
     </div>
@@ -65,7 +68,7 @@ function DescriptionFilter({description, setDescription}) {
   return (
     <div className="DescriptionFilter">
       <p>
-        <strong>Description:<br/></strong>
+        <strong>Description<br/></strong>
         <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description"/>
       </p>
     </div>
@@ -76,7 +79,7 @@ function GenreFilter({genre, setGenre}) {
   return (
     <div className="GenreFilter">
       <p>
-        <strong>Genre:<br/></strong>
+        <strong>Genre<br/></strong>
         <input type="text" value={genre} onChange={(e) => setGenre(e.target.value)} placeholder="Genre"/>
       </p>
     </div>
@@ -85,11 +88,10 @@ function GenreFilter({genre, setGenre}) {
 
 
 function RatingFilter({rating, setRating}) {
-  console.log("Rating", rating)
   return (
     <div className="MinRatingFilter">
       <p>
-        <strong>Rating:<br/></strong>
+        <strong>Minimum Rating<br/></strong>
         <input type="number" value={rating} onChange={(e) => setRating(Math.max(0, Math.min(e.target.value, 5)))} placeholder="Minimum Rating"/>
       </p>
     </div>
@@ -117,7 +119,7 @@ function Movie({movie}) {
         <p><strong>Genre:</strong> <span>{movie.genre}</span></p>
         <p><strong>Director:</strong> <span>{movie.director}</span></p>
         <p><strong>Release Year:</strong> <span>{movie.release_year}</span></p>
-        <p><strong>Rating:</strong> <span>{movie.global_rating}</span></p>
+        <p><strong>Avg. Rating:</strong> <span>{movie.global_rating}</span></p>
       </div>
     </div>
   );

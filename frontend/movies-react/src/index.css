@@ -67,6 +67,10 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  text-align: center;
+}
+
 .movie-details {
   display: flex;
   margin-top: 20px;
@@ -138,11 +142,37 @@ button[type="submit"]:hover {
   text-align: center;
 }
 
+.filters-container {
+  background-color: #cbe8ff;
+  padding: 20px 20px;
+  /* Order of margin */
+  /* top right bottom left */
+  margin: 30px 20px 30px 20px;
+  border-radius: 20px;
+}
+
 .filters {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
   gap: 30px;
+}
+
+.filters p strong{
+  display: flex;
+  margin-bottom: 5px;
+  justify-content: center;  
+}
+
+.filters input {
+  text-align: center;
+  width: 150px;
+}
+
+#filters {
+  display: flex;
+  justify-content: center;
+  margin: 0px;
+  margin-bottom: 10px;
 }
 
 .PageFilter {
