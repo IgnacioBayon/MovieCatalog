@@ -46,7 +46,7 @@ const router = createBrowserRouter([{
     element: <PageMovie/>,
     errorElement: <PageError/>,
     loader: async ({ params }) => {
-      return await fetch(`http://127.0.0.1:8000/api/films/${params.id}`)
+      return await fetch(`http://127.0.0.1:8000/api/films/${params.id}/`)
     },
   }],
 }]);
