@@ -131,7 +131,7 @@ function App() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [genre, setGenre] = useState('');
-  const [rating, setRating] = useState(null);
+  const [rating, setRating] = useState(0);
   const filters = {
     title: title,
     description: description,
