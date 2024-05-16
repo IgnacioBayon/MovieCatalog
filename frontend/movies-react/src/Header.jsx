@@ -7,29 +7,9 @@ export default function Header() {
     const isProfilePage = location.pathname.endsWith("/profile");
     const [isLoggedIn, setIsLoggedIn] = useState(null); // Use state to store login status
     
+    
     useEffect(() => {
-      async function getIsLoggedIn() {
-        try {
-            const response = await fetch("http://127.0.0.1:8000/api/users/me/", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-            });
-
-            if (!response.ok) {
-                setIsLoggedIn(false);
-                return;
-            }
-            const data = await response.json();
-            setIsLoggedIn(true);
-        } catch (error) {
-            console.error("Error fetching user info:", error);
-            setIsLoggedIn(false);
-        }
-      }
-      getIsLoggedIn();
+      getIsLoggedIn({ setIsLoggedIn });
     }, []);
 
     return (<header>
@@ -60,4 +40,27 @@ export default function Header() {
           </ul>
         </nav>
     </header>);
+}
+
+
+export async function getIsLoggedIn({ setIsLoggedIn }) {
+  try {
+      const response = await fetch("http://127.0.0.1:8000/api/users/me/", {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          credentials: "include",
+      });
+
+      if (!response.ok) {
+          setIsLoggedIn(false);
+          return;
+      }
+      const data = await response.json();
+      setIsLoggedIn(true);
+  } catch (error) {
+      console.error("Error fetching user info:", error);
+      setIsLoggedIn(false);
+  }
 }

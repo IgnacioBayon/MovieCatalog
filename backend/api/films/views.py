@@ -59,7 +59,7 @@ class FilmsView(generics.ListAPIView):
         title = self.request.query_params.get('title', None)
         description = self.request.query_params.get('description', None)
         genre = self.request.query_params.get('genre', None)
-        # rating = self.request.query_params.get('rating', None)
+        global_rating = self.request.query_params.get('rating', None)
 
         if title:
             queryset = queryset.filter(title__icontains=title)
@@ -67,8 +67,9 @@ class FilmsView(generics.ListAPIView):
             queryset = queryset.filter(description__icontains=description)
         if genre:
             queryset = queryset.filter(genre__icontains=genre)
-        # if rating:
-        #     queryset = queryset.filter(rating >= rating)
+        print(f"Global Rating {global_rating}")
+        if global_rating:
+            queryset = queryset.filter(global_rating__gte=global_rating)
         
         return queryset
     

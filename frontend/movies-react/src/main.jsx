@@ -85,7 +85,6 @@ async function registerUser({ request }) {
 async function changeProfileData({ request }) {
   const formData = await request.formData();
   const {name, email, tel, password} = Object.fromEntries(formData);
-  console.log(name, email, tel, password)
   const response = await fetch('http://127.0.0.1:8000/api/users/me/', {
     method: 'PUT',
     headers: {'Content-Type': 'application/json'},
