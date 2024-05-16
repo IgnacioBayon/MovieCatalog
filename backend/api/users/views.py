@@ -9,6 +9,7 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework.exceptions import AuthenticationFailed
 from django.utils import timezone
 from datetime import timedelta
+from api.films.models import Rating, Film
 
 
 class RegistroView(generics.CreateAPIView):
@@ -66,6 +67,19 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
         if isinstance(exc, ObjectDoesNotExist):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         return super().handle_exception(exc)
+    
+    def delete(self, request, *args, **kwargs):
+        # Get all the ratings of the user
+        user = self.get_object()
+        ratings = Rating.objects.filter(user=user)
+        # Save all the ratings
+        print(f"Ratings {ratings}")
+        for rating in ratings:
+            rating.delete()
+            rating.film.save()
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 @extend_schema(

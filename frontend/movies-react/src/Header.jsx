@@ -13,7 +13,7 @@ export default function Header() {
     }, []);
 
     return (<header>
-        <h1>FilmAffinity</h1>
+        <h1>DunderMifflin Films</h1>
         <nav>
           <ul>
             <li>
