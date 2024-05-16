@@ -66,7 +66,7 @@ function StarComponent({ movieId, profileData, rating, setRating }) {
           : "Log in to set your own rating"
         }
       </h4>
-      <div className="rating-container">
+      <div className="rating-container" style={{display: profileData.id ? '' : 'none'}}>
         <Rating initialValue={rating} onClick={handleRating}/>
       </div>
     </div>
