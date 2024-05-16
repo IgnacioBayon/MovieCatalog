@@ -10,19 +10,20 @@ export default function PageProfile() {
     return (
       // Show the user's information: name, email and phone number
       <div className="container">
-        <h2>Hello, {profileData.nombre}</h2>
+        <h3>Hello, {profileData.nombre}</h3>
         <div className="info">
           <p>
-            <strong>Email:</strong> {profileData.email}
-          </p>
-          <p>
-            <strong>Phone:</strong> {profileData.tel}
+            Your Data:<br/>
+            <ul>
+              <li><strong>E-mail:</strong> {profileData.email}</li>
+              <li><strong>Phone:</strong> {profileData.tel}</li>
+            </ul>
           </p>
           <NavLink to="/profile/edit">
-            <button>Edit profile</button>
+            <button id="edit"><strong>Edit Profile</strong></button>
           </NavLink>  
           <NavLink to="/profile/delete">
-            <button>Delete profile</button>
+            <button id="delete"><strong>Delete Account</strong></button>
           </NavLink>
         </div>
       </div>

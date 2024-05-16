@@ -117,7 +117,7 @@ p {
   border-radius: 3px;
 }
 
-button[type="submit"] {
+button{
   background-color: #333;
   color: #fff;
   padding: 10px 20px;
@@ -131,15 +131,28 @@ button[type="submit"]:hover {
   background-color: #777;
 }
 
-.buttons {
-  /* display: flex; */
-  align-items: center;
-  margin-top: 20px;
+#edit {
+  background-color: #f0ad4e;
+  margin-top: 50px;
+}
+#edit:hover {
+  background-color: #ffdfb1;
 }
 
-.buttons input[type="number"] {
-  width: 35px;
-  text-align: center;
+#delete {
+  background-color: #d9534f;
+  float: right;
+  margin-top: 50px;
+}
+#delete:hover {
+  background-color: #f0b3af;
+}
+
+#register {
+  background-color: #7ac1ff;
+}
+#register:hover {
+  background-color: #b3d9ff;
 }
 
 .filters-container {
@@ -181,11 +194,20 @@ button[type="submit"]:hover {
   margin-top: 20px;
 }
 
-/* .PageFilter input[type="number"] {
-  width: 35px;
-  text-align: center;
-} */
 .PageFilter p {
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.error-message {
+  color: #fff;
+  margin-top: 10px;
+  background-color: #d9534f;
+  padding: 10px;
+  border-radius: 5px;
+  width: 200px;
+  text-align: center;
+  border: 2px solid #722424;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
