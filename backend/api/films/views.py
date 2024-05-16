@@ -50,6 +50,8 @@ class FilmsView(generics.ListAPIView):
         description = self.request.query_params.get('description', None)
         genre = self.request.query_params.get('genre', None)
         global_rating = self.request.query_params.get('rating', None)
+        skip = self.request.query_params.get('skip', None)
+        limit = self.request.query_params.get('limit', None)
 
         if title:
             queryset = queryset.filter(title__icontains=title)
@@ -59,6 +61,10 @@ class FilmsView(generics.ListAPIView):
             queryset = queryset.filter(genre__icontains=genre)
         if global_rating:
             queryset = queryset.filter(global_rating__gte=global_rating)
+        if skip:
+            queryset = queryset[int(skip):]
+        if limit:
+            queryset = queryset[:int(limit)]
         
         return queryset
     

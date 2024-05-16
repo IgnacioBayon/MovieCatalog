@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 const INITIAL_PAGE = 1;
 const END_PAGE = 20;
-const PRODUCTS_PER_PAGE = 3;
+const FILMS_PER_PAGE = 5;
 
 
 function PageList({movieList, currentPage, setCurrentPage, filters, setFilters}) {
@@ -146,7 +146,7 @@ function App() {
   }
 
   useEffect(() => {
-    let skip = (currentPage - INITIAL_PAGE) * PRODUCTS_PER_PAGE;
+    let skip = (currentPage - INITIAL_PAGE) * FILMS_PER_PAGE;
     const fetchMovies = async () => {
       try {
         // Content type application json
@@ -156,6 +156,9 @@ function App() {
         if (description) params.append('description', description);
         if (genre) params.append('genre', genre);
         if (rating) params.append('rating', rating);
+        params.append('limit', FILMS_PER_PAGE);
+        params.append('skip', skip);
+        console.log(skip)
         
         url.search = params.toString();
         const response = await fetch(url);
@@ -164,9 +167,14 @@ function App() {
           throw new Error('Could not find the list');
         } 
         const data = await response.json();
-
-        // Set the Movie List to the data fetched from the API
-        setMovieList(data);
+        // We have done this if - else to prevent having to load all the movies
+        // in order to know if we have reached the end of the list
+        if (data.length === 0) {
+          setCurrentPage(Math.max(INITIAL_PAGE, currentPage - 1));
+        }
+        else {
+          setMovieList(data);
+        }
       } catch (error) {
         console.error('Error while obtaining the list:', error);
       }
