@@ -73,7 +73,6 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
         user = self.get_object()
         ratings = Rating.objects.filter(user=user)
         # Save all the ratings
-        print(f"Ratings {ratings}")
         for rating in ratings:
             rating.delete()
             rating.film.save()

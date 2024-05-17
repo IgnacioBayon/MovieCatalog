@@ -8,14 +8,6 @@ from api.films import serializers
 from api.users import serializers as userSerializers
 
 
-# class IsSuperUser(BasePermission):
-#     def has_permission(self, request, view):
-#         print("User is superuser: ", request.user.is_superuser)
-#         print("User: ", request.user)
-#         if request.method in SAFE_METHODS:
-#             return True
-#         return request.user and request.user.is_superuser
-
 # Create your views here.
 class CreateFilmView(generics.CreateAPIView):
     serializer_class = serializers.FilmSerializer
@@ -103,7 +95,6 @@ class CreateRatingView(generics.CreateAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            # Print all the films and users
             film = serializers.FilmSerializer.Meta.model.objects.get(id=film_id)
             user = userSerializers.UsuarioSerializer.Meta.model.objects.get(id=user_id)
         except ObjectDoesNotExist:

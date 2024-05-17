@@ -21,11 +21,9 @@ class Film(models.Model):
         # I want to get the average rating of the film
         ratings = Rating.objects.filter(film=self)
         if ratings.count() == 0:
-            print(f"Rating 0")
             return 0
         else:
             rating_var = sum([r.rating for r in ratings]) / ratings.count()
-            print(f"Rating Var{rating_var}")
             return rating_var
     
     def save(self, *args, **kwargs):
